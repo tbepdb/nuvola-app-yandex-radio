@@ -1,0 +1,20 @@
+{
+    "id": "yandex_radio", 
+    "name": "Yandex Radio", 
+    "home_url": "https://radio.yandex.ru/", 
+    "maintainer_name": "Tbepdb", 
+    "maintainer_link": "https://github.com/tbepdb", 
+    "version_major": 1, 
+    "version_minor": 0, 
+    "api_major": 3, 
+    "api_minor": 0, 
+    "categories": "AudioVideo;Audio;", 
+    "license": "2-Clause BSD-license; CC-BY-SA 3.0", 
+    "build": {
+        "icons": [
+            "src/icon.svg SCALABLE 64 128 256", 
+            "src/icon-xs.svg 16 22 24", 
+            "src/icon-sm.svg 32 48"
+        ]
+    }
+}
