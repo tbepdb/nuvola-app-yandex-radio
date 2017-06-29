@@ -1,5 +1,5 @@
 Makefile
-metadata.json
+#metadata.json
 icons
 nuvola-app-yandex-radio
 eu.tiliado.NuvolaAppYandexRadio.desktop

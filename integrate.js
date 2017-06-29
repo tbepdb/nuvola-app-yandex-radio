@@ -2,14 +2,14 @@
  * Copyright 2017 Tbepdb <tbepdb@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: 
- * 
+ * modification, are permitted provided that the following conditions are met:
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
- *    list of conditions and the following disclaimer. 
+ *    list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution. 
- * 
+ *    and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -62,24 +62,87 @@ WebApp._onPageReady = function()
 // Extract data from the web page
 WebApp.update = function()
 {
+
     var track = {
         title: null,
         artist: null,
         album: null,
-        artLocation: null,
-        rating: null
+        artLocation: null
+    }
+
+    try
+    {
+        track.title = document.querySelector(".player-controls__info .player-controls__title").innerText;
+        track.artist = document.querySelector(".player-controls .player-controls__artists span").innerText;
+        //TODO
+        //track.artLocation = document.querySelector(".track .track__cover").src.replace(
+        //      /\d+x\d+$/, "200x200");
+    }
+    catch (e)
+    {
+        //? console.log(e);
     }
 
     player.setTrack(track);
-    player.setPlaybackState(PlaybackState.UNKNOWN);
+
+    var buttons = this.getButtons();
+    if (buttons.pause)
+        var state = PlaybackState.PLAYING;
+    else if (buttons.play)
+        var state = PlaybackState.PAUSED;
+    else
+        var state = PlaybackState.UNKNOWN;
+    player.setPlaybackState(state);
+
+    player.setCanGoPrev(!!buttons.prev);
+    player.setCanGoNext(!!buttons.next);
+    player.setCanPlay(!!buttons.play);
+    player.setCanPause(!!buttons.pause);
 
     // Schedule the next update
     setTimeout(this.update.bind(this), 500);
 }
 
+WebApp.getButtons = function()
+{
+    var playPause = document.querySelector(".player-controls__play.playable");
+    return {
+        play: playPause && playPause.title === 'Пауза [P]' ? null : playPause,
+        pause: playPause && playPause.title === 'Пауза [P]' ? playPause : null,
+        next: document.querySelector(".slider__item.slider__item_track.slider__item_next")
+    }
+}
+
 // Handler of playback actions
 WebApp._onActionActivated = function(emitter, name, param)
 {
+    var buttons = this.getButtons();
+    switch (name)
+    {
+    case PlayerAction.TOGGLE_PLAY:
+        if (buttons.play)
+            Nuvola.clickOnElement(buttons.play);
+        else if (buttons.pause)
+            Nuvola.clickOnElement(buttons.pause);
+        break;
+    case PlayerAction.PLAY:
+        if (buttons.play)
+            Nuvola.clickOnElement(buttons.play);
+        break;
+    case PlayerAction.PAUSE:
+    case PlayerAction.STOP:
+        if (buttons.pause)
+            Nuvola.clickOnElement(buttons.pause);
+        break;
+    case PlayerAction.PREV_SONG:
+        if (buttons.prev)
+            Nuvola.clickOnElement(buttons.prev);
+        break;
+    case PlayerAction.NEXT_SONG:
+        if (buttons.next)
+            Nuvola.clickOnElement(buttons.next);
+        break;
+    }
 }
 
 WebApp.start();
