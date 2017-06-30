@@ -74,9 +74,8 @@ WebApp.update = function()
     {
         track.title = document.querySelector(".player-controls__info .player-controls__title").innerText;
         track.artist = document.querySelector(".player-controls .player-controls__artists span").innerText;
-        //TODO
-        //track.artLocation = document.querySelector(".track .track__cover").src.replace(
-        //      /\d+x\d+$/, "200x200");
+        track.artLocation = document.querySelector(".track .track__cover").style.backgroundImage.replace(
+          /url\(/, "").replace(/\)/, "").replace(/\d+x\d+$/, "200x200");
     }
     catch (e)
     {
